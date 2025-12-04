@@ -1,0 +1,60 @@
+
+
+# 1.// express > to create the back end server
+# 2.// dotenv > to manage environment variables
+# 3.// cors > to handle cross-origin requests > enable communication between front end and back end (allow backend to connect with anyother frontend URL)
+# 4.// mongoose > to interact with MongoDB database
+# 5.// nodemon > to automatically restart the server during development when file changes are detected
+# // cloudinary > to manage and manipulate media assets (like images and videos) in the cloud
+# // multer > to handle file uploads from clients
+# // svix > make API calles - helps with the HTTP request (to send webhooks and manage webhook endpoints)
+
+# // jsonwebtoken > to handle user authentication and authorization using JWTs
+# // bcryptjs > to hash and verify passwords for secure user authentication
+# // cookie-parser > to parse cookies from incoming requests
+# // body-parser > to parse incoming request bodies in a middleware before your handlers, available under the req.body property
+
+
+
+# - `/` = root path (like homepage)
+# - When someone visits `http://localhost:4000/`, this runs
+
+# - `req` = **request** object (data coming IN)
+# - `res` = **response** object (data going OUT)
+
+# - `app.listen()` = Turn on the server
+# - `PORT` = Which port to listen on
+# - `() => { ... }` = Callback function that runs ONCE when server starts
+# - `console.log()` = Confirmation message
+
+# ----- listen() --------
+# **Event loop** - the server starts and **continuously waits** for requests (doesn't stop).
+
+
+# Server starts on port 4000
+#       ↓
+#   [LISTENING...] ← Infinite loop waiting
+#       ↓
+# Request comes in → Process it → Send response
+#       ↓
+#   [LISTENING...] ← Back to waiting
+#       ↓
+# Another request...
+# ```
+
+# **Real analogy:**  
+# Restaurant **opens its doors** and waits for customers. It stays open (listening) until you close it (stop the server).
+
+
+<!-- folder structure 
+
+1. configs - add all configuration files that will help us to connect with other services like mongoDB and cludinary, ect.....
+2. controllers - add all the controllers fils and using that create the APIs
+3. middleware - store the middleware that are use before executing the controller files on the API call
+4. models - store the models that are use to store the data in the mongoDB database
+5. routes - declear all the routes for the API -->
+
+
+# deploy process
+
+create file --> vercel.json --> Vercel json config for express backend

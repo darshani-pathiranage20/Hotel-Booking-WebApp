@@ -1,0 +1,3 @@
+# deploy process
+
+create file --> vercel.json --> Vercel json config to support React Router in frontend
