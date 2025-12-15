@@ -17,7 +17,7 @@ const clerkWechooks = async (req, res)=>{
         await whook.verify(JSON.stringify(req.body), headers);
 
         // Getting data from request body
-        const { type, data } = req.body
+        const {data, type } = req.body
 
         const userData = {
             _id: data.id,
