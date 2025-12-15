@@ -13,14 +13,16 @@ const app = express();
 app.use(cors()) // enable CORS for all routes
 
 
-//middleware 
-app.use(express.json()) // all request will be pass using the json methos
-app.use(clerkMiddleware())
-
 // API endpoint to listen to clerk webhooks
 // IMPORTANT: Webhook route MUST come BEFORE express.json()
 // Clerk needs raw body for signature verification
 app.post("/api/clerk", clerkWebhooks);
+
+//middleware 
+app.use(express.json()) // all request will be pass using the json methos
+app.use(clerkMiddleware())
+
+
 
 
 app.get('/', (req, res) => res.send("API is working, im good "))
