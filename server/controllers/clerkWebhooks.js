@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import { messageInRaw, Webhook } from "svix";
+import { Webhook } from "svix";
 
 const clerkWechooks = async (req, res)=>{
     try {
@@ -27,7 +27,7 @@ const clerkWechooks = async (req, res)=>{
         }
 
         // switch case for diffrent events 
-        switch (key) {
+        switch (type) {
             case "user.created": {
                 await User.create(userData);
                 break;
