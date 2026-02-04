@@ -49,61 +49,21 @@ const clerkWebhooks = async (req, res) => {
             "svix-signature": svixSignature,
         };
 
-        // Check if webhook secret exists
-        const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
-        console.log('🔐 Webhook Secret:', webhookSecret ? '✅ Present' : '❌ Missing');
-        console.log('🔐 Secret starts with whsec_:', webhookSecret?.startsWith('whsec_') ? '✅ Yes' : '❌ No');
-        
-        if (!webhookSecret) {
-            console.error('❌ CLERK_WEBHOOK_SECRET is not set in environment variables');
-            return res.status(500).json({ success: false, message: "Webhook secret not configured" });
-        }
+        // verifying header - req.body is now a Buffer, so convert to string
+        await whook.verify(req.body.toString(), headers);
 
-        // Create a Svix instance with Clerk webhook secret
-        const whook = new Webhook(webhookSecret);
-        
-        let evt;
-        try {
-            console.log('🔍 Attempting to verify webhook...');
-            evt = whook.verify(payload, headers);
-            console.log('✅ Webhook verified successfully!');
-        } catch (err) {
-            console.error('❌ Webhook verification failed!');
-            console.error('Error:', err.message);
-            console.error('Stack:', err.stack);
-            return res.status(400).json({ success: false, message: "Webhook verification failed: " + err.message });
-        }
-
-        // Getting data from verified event
-        const { data, type } = evt;
-        
-        console.log('📋 Event Details:');
-        console.log('  - Type:', type);
-        console.log('  - User ID:', data.id);
-        console.log('  - Email:', data.email_addresses?.[0]?.email_address);
-
-        // Check MongoDB connection
-        const mongoose = (await import('mongoose')).default;
-        console.log('🗄️  MongoDB Status:', mongoose.connection.readyState);
-        console.log('   0=disconnected, 1=connected, 2=connecting, 3=disconnecting');
-
-        if (mongoose.connection.readyState !== 1) {
-            console.error('❌ MongoDB is not connected!');
-            return res.status(500).json({ success: false, message: "Database not connected" });
-        }
+        // Getting data from request body
+        const { data, type } = JSON.parse(req.body.toString());
 
         const userData = {
             _id: data.id,
             email: data.email_addresses[0].email_address,
-            username: data.first_name && data.last_name 
-                ? `${data.first_name} ${data.last_name}`.trim() 
-                : data.email_addresses[0].email_address.split('@')[0],
-            image: data.image_url || 'https://via.placeholder.com/150',
+            username: data.first_name + " " + data.last_name,
+            image: data.image_url,
+            recentSearchedCities: [],
         }
 
-        console.log('💾 User data prepared:', JSON.stringify(userData, null, 2));
-
-        // Switch case for different events 
+        // switch case for diffrent events 
         switch (type) {
             case "user.created": {
                 console.log('🆕 Attempting to create new user in database...');
