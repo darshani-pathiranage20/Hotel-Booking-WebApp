@@ -16,7 +16,9 @@ app.use(cors()) // enable CORS for all routes
 // API endpoint to listen to clerk webhooks
 // IMPORTANT: Webhook route MUST come BEFORE express.json()
 // Clerk needs raw body for signature verification
-app.post("/api/clerk", clerkWebhooks);
+app.post("/api/clerk",
+  express.raw({ type: "application/json" }),
+  clerkWebhooks);
 
 //middleware 
 app.use(express.json()) // all request will be pass using the json methos
