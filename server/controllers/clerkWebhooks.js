@@ -1,3 +1,4 @@
+import { json } from "express";
 import User from "../models/User.js";
 import { Webhook } from "svix";
 
@@ -14,10 +15,10 @@ const clerkWebhooks = async (req, res)=>{
         };
 
         // verifying header - req.body is now a Buffer, so convert to string
-        await whook.verify(req.body.toString(), headers);
+        await whook.verify(JSON.stringify(req.body), headers);
 
         // Getting data from request body
-        const { data, type } = JSON.parse(req.body.toString());
+        const { data, type } = req.body;
 
         const userData = {
             _id: data.id,
